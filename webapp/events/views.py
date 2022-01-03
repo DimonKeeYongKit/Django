@@ -9,12 +9,15 @@ from .models import Event, Venue
 from .forms import VenueForm, EventForm
 import csv
 
+# import PDF Stuff
 from django.http import FileResponse
 import io
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import inch
 from reportlab.lib.pagesizes import letter
 
+# import Pagenation Stuff
+from django.core.paginator import Paginator
 
 def home(request, year=datetime.now().year, month=datetime.now().strftime('%B')):
     month = month.capitalize()
@@ -48,8 +51,15 @@ def all_events(request):
 
 
 def list_venues(request):
-    venue_list = Venue.objects.all().order_by('?') # ? for random
-    return render(request, 'venue.html', {'venue_list':venue_list})
+    # venue_list = Venue.objects.all().order_by('?') # ? for random
+    venue_list = Venue.objects.all()
+
+    # set up Pagination
+    p = Paginator(Venue.objects.all(), per_page=2)
+    page = request.GET.get('page')
+    venues = p.get_page(page)
+
+    return render(request, 'venue.html', {'venue_list':venue_list, 'venues':venues})
 
 
 def show_venue(request, venue_id):
