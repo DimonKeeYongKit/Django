@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% if user.is_authenticated %}
 <center>
     <br>
     <h1>Add Venue To Database</h1>
@@ -17,5 +18,11 @@
         </form>
     {% endif %}
 </center>
-
+{% else %}
+<br>
+<center>
+    <h1>Sorry! You Must Be Logged In to View This Page....</h1>
+    <a href="{% url 'login' %}" class="btn btn-secondary">Login Here</a>
+</center>
+{% endif %}
 {% endblock %}
