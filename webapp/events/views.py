@@ -1,3 +1,4 @@
+from django.db.models import manager
 from django.shortcuts import redirect, render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib import messages
@@ -50,6 +51,24 @@ def home(request, year=datetime.now().year, month=datetime.now().strftime('%B'))
 def all_events(request):
     event_list = Event.objects.all().order_by('event_date','-name')
     return render(request, 'event_list.html', {'event_list':event_list})
+
+
+def my_event(request):
+    if request.user.is_authenticated:
+        event_list = Event.objects.filter(manager=request.user)
+        return render(request, 'event_list.html', {'event_list':event_list})
+    else:
+        messages.success(request,("You dont have the permission to access this page"))
+        return redirect('home')
+
+
+def search_event(request):
+    if request.method == "POST":
+        searched = request.POST.get('searched')
+        events = Event.objects.filter(name__icontains=searched)
+        return render(request, 'search_event.html', {'search':searched, 'events':events})
+    else:
+        return render(request, 'search_event.html', {})
 
 
 def list_venues(request):

@@ -19,10 +19,11 @@
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
               <li><a class="dropdown-item" href="{% url 'all_events' %}">All Event</a></li>
               {% if user.is_authenticated %}
+              <li><a class="dropdown-item" href="{% url 'my_event' %}">My Event</a></li>
               <li><a class="dropdown-item" href="{% url 'add_event' %}">Add Event</a></li>
               {% endif %}
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
+              <li><a class="dropdown-item" href="{% url 'search_event' %}">Search Event</a></li>
             </ul>
           </li>
           <li class="nav-item dropdown">

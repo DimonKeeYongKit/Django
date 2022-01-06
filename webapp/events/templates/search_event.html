@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form class="d-flex" method="POST" action="{% url 'search_event' %}">
+    {% csrf_token %}
+    <input class="form-control me-2" type="search" placeholder="Search Event" aria-label="Search" name='searched'>
+    <button class="btn btn-outline-secondary" type="submit">Search</button>
+  </form>
+{% if search %}
+    <h1>You Search For: {{ search }}</h1>
+        <table class='table table-hover table-striped'></table>
+        {% for event in events %}
+        <div class="card">
+            <div class="card-header">
+                <strong>{{ event }}</strong>
+            </div>
+            <div class="card-body">
+              <h5 class="card-title">{{ event.venue }}</h5>
+              <p class="card-text">
+                <ul>
+                    <li>Venue: {{ event.event_date }}</li>
+                    <li>Venue Phone: {{ event.venue.phone }}</li>
+                    <li>Manager: {{ event.manager }}</li>
+                    <li>Description: {{ event.description }}</li>
+                    
+                    <li>Attendees: 
+                        {% for user in event.attendees.all %}
+                        {{ user }} 
+                        {% endfor %}
+                    </li>
+                </ul></p>
+                {% if user.is_authenticated %}
+                  {% if user == event.manager %}
+                  <a href="{% url 'update_event' event.id %}" class="btn btn-primary">Update Event</a>
+                  <a href="{% url 'delete_event' event.id %}" class="btn btn-danger">Delete Event</a>
+                  {% endif %}
+                {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+    </table>
+{% else %}
+    <h1>You forgot to search a event!</h1>
+{%  endif %}
+
+{% endblock %}
