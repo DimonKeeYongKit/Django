@@ -1,5 +1,6 @@
 from django.shortcuts import redirect, render
 from django.http import HttpResponseRedirect, HttpResponse
+from django.contrib import messages
 import calendar
 from calendar import HTMLCalendar, month_name
 from datetime import datetime
@@ -144,9 +145,15 @@ def update_event(request, event_id):
 
 
 def delete_event(request, event_id):
+    
     event = Event.objects.get(pk=event_id)
-    event.delete()
-    return redirect('all_events')
+    if request.user == event.manager:
+        event.delete()
+        messages.success(request, ("Event Delete!"))
+        return redirect('all_events')
+    else:
+        messages.success(request, ("You did not has permission to delete this event!"))
+        return redirect('all_events')
 
 
 def delete_venue(request, venue_id):
