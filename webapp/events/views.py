@@ -7,6 +7,7 @@ from datetime import datetime
 
 from reportlab.lib import pagesizes
 from .models import Event, Venue
+from django.contrib.auth.models import User
 from .forms import VenueForm, EventForm, EventFormAdmin
 import csv
 
@@ -66,7 +67,8 @@ def list_venues(request):
 
 def show_venue(request, venue_id):
     venue = Venue.objects.get(pk=venue_id)
-    return render(request, 'show_venue.html', {'venue':venue})
+    venue_owner = User.objects.get(pk=venue.owner)
+    return render(request, 'show_venue.html', {'venue':venue, 'venue_owner':venue_owner})
 
 
 def add_venue(request):
