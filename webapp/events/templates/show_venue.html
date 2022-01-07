@@ -16,6 +16,11 @@
             {{ venue.email_address }}<br>
             Owner:{{ venue_owner }}<br>
             Owner Email:{{ venue_owner.email }}<br>
+            {% if venue.venue_image %}
+            <img src='{{ venue.venue_image.url }}'>
+            {% endif %}
+            <br>
+            <br>
           <a href="{{ venue.web }}" class="btn btn-primary">{{ venue.web }}</a>
         </div>
       </div>
