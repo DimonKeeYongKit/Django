@@ -1,7 +1,9 @@
+import datetime
 from django.db import models
 from django.db.models.base import Model
 from django.db.models.fields import CharField
 from django.contrib.auth.models import User
+from datetime import date
 
 class Venue(models.Model):
     name = models.CharField('Venue Name', max_length=120)
@@ -35,3 +37,15 @@ class Event(models.Model):
 
     def __str__(self):
         return self.name
+
+
+    @property
+    def Days_till(self):
+        
+        today = date.today()
+        if self.event_date.date() < today:
+            return "Past Event"
+        else:
+            days_till = self.event_date.date() - today
+            days_till_stripped = str(days_till).split(",")[0]
+            return  days_till_stripped
